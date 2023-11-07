@@ -61,12 +61,12 @@ public with sharing class BoatDataService {
     @AuraEnabled(cacheable=true)
     public static String getBoatsByLocation(Decimal latitude, Decimal longitude, String boatTypeId)
     {
-        String query = 'SELECT Name, Geolocation_Latitude__s, Geolocation_Longitude__s FROM Boat__c ';
+        String query = 'SELECT Name, Geolocation__Latitude__s, Geolocation__Longitude__s FROM Boat__c ';
         if(String.isNotBlank(boatTypeId))
         {
             query += 'WHERE BoatType__c = :boatTypeId ';
         }
-        query += 'WITH SECURITY_ENFORCED ORDER BY DISTANCE(Geolocation__c, GEOLOCATION(:latitude, :longitude), \'mi\') LIMIT 10';
+        query += ' WITH SECURITY_ENFORCED ORDER BY DISTANCE(Geolocation__c, GEOLOCATION(:latitude, :longitude), \'mi\') LIMIT 10';
         return JSON.serialize(Database.query(query));
     }
 

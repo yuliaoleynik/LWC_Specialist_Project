@@ -1,11 +1,11 @@
 //import fivestar static resource, call it fivestar
-
+import { LightningElement, api } from "lwc";
 // add constants here
 
-export default class FiveStarRating extends LightningElement {
-  //initialize public readOnly and value properties
-  readOnly;
-  value;
+export default class FiveStarRating extends LightningElement 
+{
+  @api readOnly;
+  @api value;
 
   editedValue;
   isRendered;

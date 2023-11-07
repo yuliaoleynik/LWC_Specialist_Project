@@ -1,16 +1,34 @@
 .tile {
-    width: 100%;
-    height: 220px;
-    padding: 1px !important;
-    background-position: center;
-    background-size: cover;
-    border-radius: 5px;
-  }
-  .selected {
-    border: 3px solid rgb(0, 95, 178);
-    border-radius: 5px;
-  }
-  .tile-wrapper {
-    cursor: pointer;
-    padding: 5px;
-  }
+  width: 100%;
+  height: 220px;
+  padding: 1px !important;
+  background-position: center;
+  background-size: cover;
+  border-radius: 5px;
+}
+
+.selected {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  animation-name: example;
+  animation-duration: 0.25s;
+  border-left: 8px solid #1b9cd0;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.tile-wrapper {
+  cursor: pointer;
+  padding: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.tile-wrapper:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}
+
+@keyframes example {
+  0%   {border-left: 2px solid #ffffff;}
+  25%  {border-left: 3px solid #e5f4ff;}
+  50%  {border-left: 4px solid #c9e9ff;}
+  75%  {border-left: 4px solid #abdfff;}
+  100% {border-left: 5px solid #1b9cd0;}
+}
