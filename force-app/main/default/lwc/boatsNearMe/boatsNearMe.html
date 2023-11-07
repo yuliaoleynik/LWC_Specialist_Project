@@ -3,7 +3,7 @@
        <template if:true={isLoading}>
         <lightning-spinner alternative-text="Loading..." variant="brand" size="large"></lightning-spinner>
        </template>
-       <lightning-map map-markers={mapMarkers}></lightning-map>
+       <lightning-map map-markers={mapMarkers} zoom-level="4"></lightning-map>
        <div slot="footer">Top 10 Only!</div>
     </lightning-card>
   </template>

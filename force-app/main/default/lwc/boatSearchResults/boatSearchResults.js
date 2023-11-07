@@ -114,6 +114,7 @@ export default class BoatSearchResults extends LightningElement
     if(isLoading)
     {
       this.dispatchEvent(new CustomEvent('loading'));
+      console.log('loading');
     }
     else
     {
