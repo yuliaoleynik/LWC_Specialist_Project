@@ -39,10 +39,6 @@ export default class BoatSearchResults extends LightningElement
     if(data)
     {
       this.boats = data;
-<<<<<<< HEAD
-      console.log('here in wire');
-=======
->>>>>>> 8cff279d84967a81e0dca370003b8b21352889e4
     }
     else if(error)
     {
