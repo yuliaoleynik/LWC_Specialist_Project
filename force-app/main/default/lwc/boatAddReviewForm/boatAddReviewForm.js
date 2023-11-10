@@ -60,7 +60,7 @@ export default class BoatAddReviewForm extends LightningElement
     // Clears form data upon submission
     handleReset() 
     {
-        const inputFields = this.template.querySelector('lightning-input-field');
+        const inputFields = this.template.querySelectorAll('lightning-input-field');
         if(inputFields)
         {
             inputFields.forEach(field => { field.reset(); });
