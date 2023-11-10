@@ -1,5 +1,5 @@
-public with sharing class BoatDataService {
-    
+public with sharing class BoatDataService 
+{
     @AuraEnabled(cacheable=true)
     public static List<BoatType__c> getBoatTypes() 
     {
@@ -14,7 +14,8 @@ public with sharing class BoatDataService {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Boat__c> getBoats(String boatTypeID){
+    public static List<Boat__c> getBoats(String boatTypeID)
+    {
         try 
         {
            String query = 'SELECT ' 
@@ -35,10 +36,56 @@ public with sharing class BoatDataService {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Boat__c> getSimilarBoats(Id boatId, String similarBy){
+    public static List<Boat__c> getSimilarBoats(Id boatId, String similarBy)
+    {
         try 
         {
-            return [SELECT Id, Name FROM Boat__c  WITH SECURITY_ENFORCED];
+            List<Boat__c> relatedBoats = new List<Boat__c>();
+            List<Boat__c> parentBoat = [SELECT Id, Length__c, Price__c, BoatType__c, BoatType__r.Name
+                                    FROM Boat__c
+                                    WHERE Id = :boatId 
+                                    WITH SECURITY_ENFORCED];
+            if (parentBoat.isEmpty()) 
+            {
+                return relatedBoats;
+            }
+            if (similarBy == 'Length') 
+            {
+                relatedBoats = [
+                    SELECT Id, Contact__r.Name, Name, BoatType__c,
+                            BoatType__r.Name, Length__c, Picture__c, Price__c, Year_Built__c
+                    FROM Boat__c
+                    WHERE Id != :parentBoat.get(0).Id
+                    AND (Length__c >= :parentBoat.get(0).Length__c / 1.2)
+                    AND (Length__c <= :parentBoat.get(0).Length__c * 1.2)
+                    WITH SECURITY_ENFORCED
+                    ORDER BY Length__c, Price__c, Year_Built__c
+                ];
+            } else if (similarBy == 'Price') 
+            {
+                relatedBoats = [
+                    SELECT Id, Contact__r.Name, Name, BoatType__c,
+                            BoatType__r.Name, Length__c, Picture__c, Price__c, Year_Built__c
+                    FROM Boat__c
+                    WHERE Id != :parentBoat.get(0).Id
+                    AND (Price__c >= :parentBoat.get(0).Price__c / 1.2)
+                    AND (Price__c <= :parentBoat.get(0).Price__c * 1.2)
+                    WITH SECURITY_ENFORCED
+                    ORDER BY Price__c, Length__c, Year_Built__c
+                ];
+            } else if (similarBy == 'Type') 
+            {
+                relatedBoats = [
+                    SELECT Id, Contact__r.Name, Name, BoatType__c,
+                            BoatType__r.Name, Length__c, Picture__c, Price__c, Year_Built__c
+                    FROM Boat__c
+                    WHERE Id != :parentBoat.get(0).Id
+                    AND (BoatType__c = :parentBoat.get(0).BoatType__c)
+                    WITH SECURITY_ENFORCED
+                    ORDER BY Price__c, Length__c, Year_Built__c
+                ];
+            }
+            return relatedBoats;
         } 
         catch (Exception e) 
         {
@@ -47,7 +94,8 @@ public with sharing class BoatDataService {
     }
 
     @AuraEnabled
-    public static List<BoatReview__c> getAllReviews(Id boatId){
+    public static List<BoatReview__c> getAllReviews(Id boatId)
+    {
         try 
         {
             return [SELECT Id, Name, Comment__c, Rating__c,
