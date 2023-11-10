@@ -46,11 +46,17 @@ public with sharing class BoatDataService {
         }
     }
 
-    @AuraEnabled(cacheable=false)
+    @AuraEnabled
     public static List<BoatReview__c> getAllReviews(Id boatId){
         try 
         {
-            return [SELECT Id, Name FROM BoatReview__c  WITH SECURITY_ENFORCED];
+            return [SELECT Id, Name, Comment__c, Rating__c,
+                    LastModifiedDate, CreatedDate, CreatedBy.Name,
+                    CreatedBy.SmallPhotoUrl, CreatedBy.CompanyName
+                    FROM BoatReview__c
+                    WHERE Boat__c =: boatId
+                    WITH SECURITY_ENFORCED
+                    ORDER BY CreatedDate DESC];
         } 
         catch (Exception e) 
         {
