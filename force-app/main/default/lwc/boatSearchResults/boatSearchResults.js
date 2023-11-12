@@ -28,12 +28,13 @@ export default class BoatSearchResults extends LightningElement
 
   columns = columns;
   boatTypeId = '';
+  keyWord = '';
   isLoading = false;
   
   @wire(MessageContext)
   messageContext;
   
-  @wire(getBoats, {boatTypeID: '$boatTypeId'})
+  @wire(getBoats, {boatTypeID: '$boatTypeId', keyWord: '$keyWord'})
   wiredBoats({data, error}) 
   {
     if(data)
@@ -42,17 +43,18 @@ export default class BoatSearchResults extends LightningElement
     }
     else if(error)
     {
-      console.log(error);
+      console.log(error.message);
     }
   }
   
   // updates the existing boatTypeId property
   @api
-  searchBoats(boatTypeId) 
+  searchBoats(boatTypeId, keyWord) 
   { 
     this.isLoading = true;
     this.notifyLoading(this.isLoading);
     this.boatTypeId = boatTypeId;
+    this.keyWord = keyWord;
   }
   
   // refresh the boats asynchronously
@@ -114,7 +116,6 @@ export default class BoatSearchResults extends LightningElement
     if(isLoading)
     {
       this.dispatchEvent(new CustomEvent('loading'));
-      console.log('loading');
     }
     else
     {

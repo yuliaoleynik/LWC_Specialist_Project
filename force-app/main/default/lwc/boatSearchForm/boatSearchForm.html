@@ -1,6 +1,13 @@
 <template>
     <lightning-layout>
-      <lightning-layout-item class="slds-align-middle">
+      <lightning-layout-item padding="around-small">
+        <lightning-input
+                label="Search by Name"
+                type="text"
+                onchange={handleSearchKeyChange}>
+        </lightning-input>
+      </lightning-layout-item>
+      <lightning-layout-item  padding="around-small" class="slds-align-middle">
         <lightning-combobox
             value={selectedBoatTypeId}
             options={searchOptions}

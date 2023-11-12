@@ -14,8 +14,9 @@ public with sharing class BoatDataService
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Boat__c> getBoats(String boatTypeID)
+    public static List<Boat__c> getBoats(String boatTypeID, String keyWord)
     {
+        String searchWord = keyWord + '%';
         try 
         {
            String query = 'SELECT ' 
@@ -23,10 +24,21 @@ public with sharing class BoatDataService
                         + 'Geolocation__Longitude__s, Picture__c, Contact__r.Name, '
                         + 'BoatType__c, BoatType__r.Name, Length__c, Price__c '
                         + 'FROM Boat__c';
-            if(String.isNotBlank(boatTypeID))
+
+            if(String.isNotBlank(boatTypeID) && String.isNotBlank(keyWord))
+            {
+                query += ' WHERE Name LIKE :searchWord AND BoatType__c = :boatTypeID';
+                return Database.query(query);
+            }
+            else if(String.isNotBlank(boatTypeID))
             {
                 query += ' WHERE BoatType__c = :boatTypeID';
             }
+            else if(String.isNotBlank(keyWord))
+            {
+                query += ' WHERE Name LIKE :searchWord';
+            }
+            
             return Database.query(query);
         } 
         catch (Exception e) 

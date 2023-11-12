@@ -5,6 +5,7 @@ export default class BoatSearchForm extends LightningElement
 {
     @track searchOptions;
     selectedBoatTypeId = '';
+    keyWord = '';
     error = undefined;
 
     @wire(getBoatTypes, {})
@@ -29,8 +30,21 @@ export default class BoatSearchForm extends LightningElement
     handleSearchOptionChange(event)
     {
         this.selectedBoatTypeId = event.detail.value;
+        this.sendSearchEvent();
+    }
+
+    handleSearchKeyChange(event)
+    {
+        this.keyWord = event.detail.value;
+        this.sendSearchEvent();
+    }
+
+    sendSearchEvent()
+    {
         const searchEvent = new CustomEvent('search', {
-            detail: {boatTypeId: this.selectedBoatTypeId }
+            detail: {
+                boatTypeId: this.selectedBoatTypeId,
+                keyWord: this.keyWord }
         });
         this.dispatchEvent(searchEvent);
     }
